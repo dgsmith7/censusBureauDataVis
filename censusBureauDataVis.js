@@ -24,10 +24,11 @@ d3.queue()
     .defer(d3.json, "data/gz_2010_us_040_00_5m.json")
     .defer(d3.csv, "data/popsByState2015-2019.csv", function(d){
         // Convert to number
-        d['PCTPOVALL_2014'] = +d['PCTPOVALL_2014'];
-
-        // Use the county's FIPS countyode to access that county's data
-        return data_map.set(d['FIPStxt'], d);
+        d['2015'] = +d['2015'];
+        // Use the state's FIPS code to access that county's data
+        console.log(d['FIPS'])
+        console.table(data_map.set(d['FIPS'], d));
+        return data_map.set(d['FIPS'], d);
     })
     .await(function(error, map_json, data_csv) {
         // How does the data look like?
