@@ -1,23 +1,4 @@
 
-let popsByYear=[];
-
-function getPopData() {
-    // simulate ten years of data for all 50 states + DC
-    for (let i = 0; i < 10; i ++) {
-        let statePop = [];
-        for (let j = 0; j < 51; j ++) {
-            let randomPop = Math.floor(Math.random() * 5000 + 1000);
-            statePop.push({stateNum: j, population: randomPop});
-        }
-        popsByYear.push({"year": 2000+i, "stateList": statePop});
-    }
-    return popsByYear;
-};
-
-
-//    document.getElementById("redraw").addEventListener("click", redraw);
-    getPopData();
-
 let data_map = d3.map();
 
 d3.queue()
@@ -26,11 +7,11 @@ d3.queue()
         "data/popsByState2015-2019.csv",
         function (d) {
             // Convert population data to numbers
-            d['2015'] = Number(d["2015"]);
-            d['2016'] = Number(d["2016"]);
-            d['2017'] = Number(d["2017"]);
-            d['2018'] = Number(d["2018"]);
-            d['2019'] = Number(d["2019"]);
+            d['pop2015'] = Number(d["pop2015"]);
+            d['pop2016'] = Number(d["pop2016"]);
+            d['pop2017'] = Number(d["pop2017"]);
+            d['pop2018'] = Number(d["pop2018"]);
+            d['pop2019'] = Number(d["pop2019"]);
             // Use the state's FIPS code to access that county's data
             return data_map.set(d['FIPS'], d);
         })
@@ -59,10 +40,10 @@ d3.queue()
 
         //----------------------------------------
         // Scale setup
-        let colors = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
-            '#6baed6','#4292c6','#2171b5','#084594'];
+        let colors = ['rgb(188, 233, 99)','rgb(138, 210, 106)','rgb(100, 188, 111)','rgb(73, 164, 114)',
+            'rgb(54, 139, 112)','rgb(45, 117, 107)','rgb(40, 95, 97)','rgb(36,74,85)'];
         let all_values = data_map.values().map( function(d){
-            return d['2015'];
+            return d['pop2015'];
         });
 
         // Quantile scale
@@ -71,16 +52,16 @@ d3.queue()
             .range(colors);
 
         // Linear scale
-        // var max = d3.max(all_values),
+        // let max = d3.max(all_values),
         //     min = d3.min(all_values);
-        // var color_scale = d3.scaleLinear()
+        // let color_scale = d3.scaleLinear()
         //                     .domain([min, max])
         //                     .range([colors[0], colors[colors.length-1]]);
 
         // Power scale
-        // var max = d3.max(all_values),
+        // let max = d3.max(all_values),
         //     min = d3.min(all_values);
-        // var color_scale = d3.scalePow()
+        // let color_scale = d3.scalePow()
         //                     .domain([min, max])
         //                     .range([colors[0], colors[colors.length-1]])
         //                     .exponent(3);
@@ -97,15 +78,12 @@ d3.queue()
             .attr('d', path_gen)
             .style('fill', function(d) {
                 fips_code = d['properties']['STATE'];
-
                 // Color only if the data exists for the FIPS code
                 if (data_map.has(fips_code)) {
                     // Get the entire row of poverty data for each FIPS code
-                    poverty_data = data_map.get(fips_code);
-
+                    pop_data = data_map.get(fips_code);
                     // Get the specific feature
-                    data = poverty_data['2015'];
-
+                    data = pop_data['pop2015'];
                     return color_scale(data);
                 };
             })
@@ -119,11 +97,11 @@ d3.queue()
                     .style('opacity', 1);
 
                 // Unload data
-                fips_code = d['properties']['STATE'] + d['properties']['COUNTY'];
+                fips_code = d['properties']['STATE'];
                 if (data_map.has(fips_code)) {
-                    poverty_data = data_map.get(fips_code);
-                    name = poverty_data['Area_Name'];
-                    poverty_rate = poverty_data['PCTPOVALL_2014'];
+                    pop_data = data_map.get(fips_code);
+                    name = pop_data['Name'];
+                    pop = pop_data['pop2015'];
                 };
 
                 // Show the tooltip
@@ -131,7 +109,7 @@ d3.queue()
                     .style('visibility','visible')
                     .style('top', d3.event.pageY+10 + 'px')
                     .style('left', d3.event.pageX+10 + 'px')
-                    .html('<strong>' + name + '</strong><br />Poverty rate: ' + poverty_rate + '%');
+                    .html('<strong>' + name + '</strong><br />Population: ' + pop);
             })
             .on('mouseout', function(d) {
                 // Make the county usual opacity again
