@@ -34,7 +34,7 @@ d3.queue()
         //----------------------------------------
         // Geography setup
         let proj = d3.geoAlbersUsa()
-            .scale(1300)
+            .scale(1000)
             .translate([width/2, height/2]);
         let path_gen = d3.geoPath(proj);
 
@@ -92,7 +92,7 @@ d3.queue()
             .style('stroke-width', 0.8)
             .style('stroke-opacity', 0.1)
             .on('mouseover', function(d) {
-                // Make the county color darker
+                // Make the state color darker
                 d3.select(this)
                     .style('opacity', 1);
 
@@ -101,7 +101,7 @@ d3.queue()
                 if (data_map.has(fips_code)) {
                     pop_data = data_map.get(fips_code);
                     name = pop_data['Name'];
-                    pop = pop_data['pop2015'];
+                    data = pop_data['pop2015'];
                 };
 
                 // Show the tooltip
@@ -109,7 +109,7 @@ d3.queue()
                     .style('visibility','visible')
                     .style('top', d3.event.pageY+10 + 'px')
                     .style('left', d3.event.pageX+10 + 'px')
-                    .html('<strong>' + name + '</strong><br />Population: ' + pop);
+                    .html('<strong>' + name + '</strong><br />Population: ' + data);
             })
             .on('mouseout', function(d) {
                 // Make the county usual opacity again
