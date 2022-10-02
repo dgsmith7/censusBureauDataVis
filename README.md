@@ -1,11 +1,15 @@
 #censusBureauDataVis
+
+Possible resources from initial research:
 https://www.census.gov/data/academy/webinars/2022/back-to-data-basics-series/psychology-of-mapping-census-data.html
 https://github.com/uscensusbureau/citysdk
 https://api.census.gov/data.html
 https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf
 https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html
 
+Find the data, get the data, massage the data, visualize the data
 
+Source for population data:
 https://api.census.gov/data/2017/pep/population?get=POP,STATE&for=state:*&key=MYKEY
 
 FIPS CODES
