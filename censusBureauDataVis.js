@@ -21,8 +21,8 @@ function getPopData() {
 let data_map = d3.map();
 
 d3.queue()
-    .defer(d3.json, "data/gz_2010_us_050_00_5m.json")
-    .defer(d3.csv, "data/PovertyEstimates.csv", function(d){
+    .defer(d3.json, "data/gz_2010_us_040_00_5m.json")
+    .defer(d3.csv, "data/popsByState2015-2019.csv", function(d){
         // Convert to number
         d['PCTPOVALL_2014'] = +d['PCTPOVALL_2014'];
 
