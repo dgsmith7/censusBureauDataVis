@@ -8,6 +8,8 @@ https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-gui
 https://www.census.gov/data/developers/data-sets/popest-popproj/popest.html
 
 Find the data, get the data, massage the data, visualize the data
+Very useful example:
+https://github.com/woojink/d3-map-tutorial/blob/master/index.html
 
 Source for population data:
 https://api.census.gov/data/2017/pep/population?get=POP,STATE&for=state:*&key=MYKEY
