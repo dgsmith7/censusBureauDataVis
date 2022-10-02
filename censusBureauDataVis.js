@@ -22,47 +22,51 @@ let data_map = d3.map();
 
 d3.queue()
     .defer(d3.json, "data/gz_2010_us_040_00_5m.json")
-    .defer(d3.csv, "data/popsByState2015-2019.csv", function(d){
-        // Convert to number
-        d['2015'] = +d['2015'];
-        // Use the state's FIPS code to access that county's data
-        console.log(d['FIPS'])
-        console.table(data_map.set(d['FIPS'], d));
-        return data_map.set(d['FIPS'], d);
-    })
+    .defer(d3.csv,
+        "data/popsByState2015-2019.csv",
+        function (d) {
+            // Convert population data to numbers
+            d['2015'] = Number(d["2015"]);
+            d['2016'] = Number(d["2016"]);
+            d['2017'] = Number(d["2017"]);
+            d['2018'] = Number(d["2018"]);
+            d['2019'] = Number(d["2019"]);
+            // Use the state's FIPS code to access that county's data
+            return data_map.set(d['FIPS'], d);
+        })
     .await(function(error, map_json, data_csv) {
         // How does the data look like?
-        // console.log(data_csv);
+        console.log(data_csv);
 
         // Unpack the GeoJSON features
-        var counties = map_json['features'];
+        let states = map_json['features'];
 
         //----------------------------------------
         // SVG setup
-        var width = 1200,
+        let width = 1200,
             height = 600;
 
-        var svg = d3.select('#map').append('svg')
+        let svg = d3.select('#map').append('svg')
             .attr('width', width)
             .attr('height', height);
 
         //----------------------------------------
         // Geography setup
-        var proj = d3.geoAlbersUsa()
+        let proj = d3.geoAlbersUsa()
             .scale(1300)
             .translate([width/2, height/2]);
-        var path_gen = d3.geoPath(proj);
+        let path_gen = d3.geoPath(proj);
 
         //----------------------------------------
         // Scale setup
-        var colors = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
+        let colors = ['#f7fbff','#deebf7','#c6dbef','#9ecae1',
             '#6baed6','#4292c6','#2171b5','#084594'];
-        var all_values = data_map.values().map( function(d){
-            return d['PCTPOVALL_2014'];
+        let all_values = data_map.values().map( function(d){
+            return d['2015'];
         });
 
         // Quantile scale
-        var color_scale = d3.scaleQuantile()
+        let color_scale = d3.scaleQuantile()
             .domain(all_values)
             .range(colors);
 
@@ -87,12 +91,12 @@ d3.queue()
         //----------------------------------------
         // The map, finally!
         svg.selectAll('path')
-            .data(counties)
+            .data(states)
             .enter()
             .append('path')
             .attr('d', path_gen)
             .style('fill', function(d) {
-                fips_code = d['properties']['STATE'] + d['properties']['COUNTY'];
+                fips_code = d['properties']['STATE'];
 
                 // Color only if the data exists for the FIPS code
                 if (data_map.has(fips_code)) {
@@ -100,7 +104,7 @@ d3.queue()
                     poverty_data = data_map.get(fips_code);
 
                     // Get the specific feature
-                    data = poverty_data['PCTPOVALL_2014'];
+                    data = poverty_data['2015'];
 
                     return color_scale(data);
                 };
