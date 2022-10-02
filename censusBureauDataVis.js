@@ -90,7 +90,7 @@ d3.queue()
             .style('opacity', 0.8)
             .style('stroke', '#a0a0a0')
             .style('stroke-width', 0.8)
-            .style('stroke-opacity', 0.1)
+            .style('stroke-opacity', 0.3)
             .on('mouseover', function(d) {
                 // Make the state color darker
                 d3.select(this)
