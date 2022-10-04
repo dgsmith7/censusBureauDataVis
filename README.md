@@ -1,5 +1,10 @@
 #censusBureauDataVis
 
+TODO
+Animate all columns
+Try other database
+CSS and design in general
+
 Possible resources from initial research:
 https://www.census.gov/data/academy/webinars/2022/back-to-data-basics-series/psychology-of-mapping-census-data.html
 https://github.com/uscensusbureau/citysdk
